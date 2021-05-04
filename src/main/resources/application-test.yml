@@ -1,0 +1,7 @@
+jasypt:
+  encryptor:
+    password: test
+    
+oauth2Config: 
+  clientId: travel-api-client
+  secret: ENC(e+itvhYT46LjmNwED8CWQg==)

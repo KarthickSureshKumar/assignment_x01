@@ -1,0 +1,80 @@
+<div class="container-fluid">
+  <div class="jumbotron">
+      <h1>KLM Travel App</h1>
+  </div>
+  <nav>
+    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+      <a *ngIf="location" class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-airports" role="tab" aria-controls="nav-airports" aria-selected="true">Airports</a>
+      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-search" role="tab" aria-controls="nav-search" aria-selected="false">Search</a>
+      <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-stats" role="tab" aria-controls="nav-stats" aria-selected="false" (click)="getStats()">Statistics</a>
+    </div>
+  </nav>
+  <div class="tab-content" id="nav-tabContent">
+    <div *ngIf="location" class="tab-pane fade show active" id="nav-airports" role="tabpanel">
+      <h3 class="mt-4">All Airports</h3>
+      <table datatable [dtOptions]="dtOptions" class="table table-striped table-hover">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Code</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody *ngIf="location?.length != 0">
+          <tr *ngFor="let loc of location">
+            <td>{{ loc.name }}</td>
+            <td>{{ loc.code }}</td>
+            <td>{{ loc.description }}</td>
+          </tr>
+        </tbody>
+        <tbody *ngIf="location?.length == 0">
+          <tr>
+            <td colspan="3" class="no-data-available">No data available!</td>
+          </tr>
+        </tbody>
+      </table>
+      </div>
+    <div class="tab-pane fade" id="nav-search" role="tabpanel">
+      <form class="mt-4" #fareForm="ngForm">
+        <div class="form-row">
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Enter Origin" name="origin" (ngModelChange)="searchCode(origin.value,'origin')" #origin="ngModel" ngModel="{{selectedOrgin?.displayText}}" required autocomplete="off">
+            <div class="list-group" *ngIf="originResults?.length !== 0">
+              <button type="button" class="list-group-item list-group-item-action" *ngFor="let org of originResults" (click)="selectedItem(org,'origin')">{{org.name}} ({{org.code}})</button>
+            </div>
+          </div>
+          <div class="col">
+            <input type="text" class="form-control" placeholder="Enter Destination" name="dest" (ngModelChange)="searchCode(dest.value,'dest')" #dest="ngModel" ngModel="{{selectedDestination?.displayText}}" required autocomplete="off">
+            <div class="list-group" *ngIf="destResults?.length !== 0">
+              <button type="button" class="list-group-item list-group-item-action" *ngFor="let des of destResults" (click)="selectedItem(des,'dest')">{{des.name}} ({{des.code}})</button>
+            </div>
+          </div>
+          <div class="col">
+            <button (click)="getFares(fareForm.value)" class="btn btn-danger" [disabled]=fareForm.invalid>Get Fares</button>
+          </div>
+        </div>
+      </form>
+      <table class="table table-striped table-hover mt-4" *ngIf="fareDetails">
+        <thead class="table-bordered">
+          <tr>
+            <th>Origin Airport</th>
+            <th>Destination Airport</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{{ fareDetails.orgin.description }}</td>
+            <td>{{ fareDetails.destination.description }}</td>
+            <td>{{ fareDetails.amount }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="tab-pane fade" id="nav-stats" role="tabpanel">
+      <textarea cols=100 rows=8 *ngIf="statisticJson" class="jumbotron jumbotron-fluid mt-4 text-monospace">{{statisticJson}}</textarea>
+    </div>
+  </div>
+</div>
+
+

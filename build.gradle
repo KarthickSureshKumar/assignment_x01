@@ -1,0 +1,58 @@
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:2.1.1.RELEASE")
+    }
+}
+
+plugins {
+    id 'nebula.optional-base' version '3.0.3'
+    id 'nebula.provided-base' version '3.0.3'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'nebula.provided-base'
+apply plugin: 'io.spring.dependency-management'
+
+bootJar{
+    baseName = 'destination-finder-client'
+    version =  '0.1.0'
+}
+
+processResources {
+    from ('assignment-ui/dist/assignment-ui') {
+        into 'static'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+processResources.dependsOn('assignment-ui:build')
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+dependencies {
+    implementation("org.springframework.boot:spring-boot-starter-web") {
+        exclude module: "spring-boot-starter-tomcat"
+    }
+    implementation("org.springframework.boot:spring-boot-starter-jetty")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.1.1.RELEASE")
+    implementation group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5'
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+	compileOnly 'org.projectlombok:lombok'  
+	annotationProcessor 'org.projectlombok:lombok'
+	implementation group: 'com.github.ulisesbocchio', name: 'jasypt-spring-boot-starter', version: '2.1.1'
+    testCompile("junit:junit")
+    testCompile("org.springframework.boot:spring-boot-starter-test")
+    testCompileOnly 'org.projectlombok:lombok'
+	testAnnotationProcessor 'org.projectlombok:lombok'
+}

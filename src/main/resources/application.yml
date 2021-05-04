@@ -1,0 +1,27 @@
+server: 
+  port: 9000
+  servlet:  
+    context-path: /
+
+#Services
+fareService: http://localhost:8080/fares/{origin}/{destination}?currency={currency}
+airportService: http://localhost:8080/airports/{code}
+allAirportService: http://localhost:8080/airports
+tokenService: http://localhost:8080/oauth/token
+
+jasypt:
+  encryptor:
+    password: zeTu8fcJ7uSJTfSc
+  
+oauth2Config: 
+  clientId: travel-api-client
+  secret: ENC(2eaTdcFnitNVUrGJYjxxrA==)
+
+management:
+  endpoints:
+    metrics:
+      enabled: true  
+    web:  
+      exposure:
+        include: "*"
+        
